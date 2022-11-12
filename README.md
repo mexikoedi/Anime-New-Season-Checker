@@ -8,7 +8,7 @@ If you already use websites/applications/... which notify you every time an anim
 But otherwise if you always miss new seasons or if you are a person who uses bookmarks and checks them after sometime via manually searching in the browser for example then this might be something for you.
 
 ## How to install?
-**You need Java! Here: https://www.java.com/de/download** <br>
+**You need Java! Here: https://www.java.com/en/download** <br>
 You can download it if you select the green button named "Code" then "Download ZIP" or download the ZIP file over the releases tab. <br>
 Extract the downloaded zip folder and then open the program by opening the .jar file. <br>
 Before opening the .jar file open the "list.txt" file and add your anime titles and URLs to it. <br>
