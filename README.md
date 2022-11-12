@@ -16,7 +16,7 @@ Before opening the .jar file open the "list.txt" file and add your anime titles 
 ## Limitations?
 1) "list.txt" cannot be empty. <br>
 2) Don't use ":" after "anime:". <br>
-3) Only use website URLs from [IMDB](https://www.imdb.com) . <br>
+3) Only use website URLs from [IMDB](https://www.imdb.com). <br>
 4) The .jar file and the "list.txt" file need to be in the same directory. <br>
 **Follow the examples below.**
 
