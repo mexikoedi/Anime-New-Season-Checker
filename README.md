@@ -28,7 +28,7 @@ At the end all the data fills the text fields in the GUI.
 ## How fast is this program working?
 It will get slower and slower the more anime titles you add because it needs to connect to each IMDB URL and check every single one of them until it can fill the text fields.
 
-For example:
+For example: <br>
 To get the data for 150 anime titles the program needs roughly 3.6 minutes.
 
 ## Examples?
