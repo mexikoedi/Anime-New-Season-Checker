@@ -1,0 +1,8 @@
+anime:Nisekoi
+source:https://www.imdb.com/title/tt3115338
+
+anime:Charlotte
+source:https://www.imdb.com/title/tt4574736
+
+anime:Nagi no Asukara
+source:https://www.imdb.com/title/tt3104236
