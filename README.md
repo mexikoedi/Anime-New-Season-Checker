@@ -36,6 +36,13 @@ To get the data for 150 anime titles the program needs roughly 3.6 minutes.
 ![GUI](https://i.ibb.co/cw0xtvm/example2.png "GUI") <br>
 ![Program use](https://i.ibb.co/wwsHrr5/example3.png "Program use")
 
+
+
+
+
+
+
+
 ## Third-party information
 ```
 jsoup License
