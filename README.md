@@ -4,25 +4,25 @@
 This is a Java program with a GUI which lets you check if an anime got a new season, how many seasons the anime already has and their runtime.
 
 ## Is this useful to me?
-If you already use websites/applications/... which notify you every time an anime gets a new season then no.
+If you already use websites/applications/... which notify you every time an anime gets a new season then no. <br>
 But otherwise if you always miss new seasons or if you are a person who uses bookmarks and checks them after sometime via manually searching in the browser for example then this might be something for you.
 
 ## How to install?
-**You need Java! Here: https://www.java.com/de/download**
-You can download the ZIP file over the releases tab. Extract the downloaded zip folder and then open the program by opening the .jar file.
-Before opening the .jar file open the "list.txt" file and add your anime titles and URLs to it. 
+**You need Java! Here: https://www.java.com/de/download** <br>
+You can download the ZIP file over the releases tab. Extract the downloaded zip folder and then open the program by opening the .jar file. <br>
+Before opening the .jar file open the "list.txt" file and add your anime titles and URLs to it. <br>
 **Read below for more important information.**
 
 ## Limitations?
-1) "list.txt" cannot be empty.
-2) Don't use ":" after "anime:".
-3) Only use website URLs from [IMDB](https://www.imdb.com) .
-4) The .jar file and the "list.txt" file need to be in the same directory.
+1) "list.txt" cannot be empty. <br>
+2) Don't use ":" after "anime:". <br>
+3) Only use website URLs from [IMDB](https://www.imdb.com) . <br>
+4) The .jar file and the "list.txt" file need to be in the same directory. <br>
 **Follow the examples below.**
 
 ## How does it work?
-The Java program connects to the given IMDB URLs and gets the data from there (seasons/runtime). 
-After that it checks if the data is correct and formats it accordingly.
+The Java program connects to the given IMDB URLs and gets the data from there (seasons/runtime). <br> 
+After that it checks if the data is correct and formats it accordingly. <br>
 At the end all the data fills the text fields in the GUI.
 
 ## How fast is this program working?
@@ -32,11 +32,11 @@ For example:
 To get the data for 150 anime titles the program needs roughly 3.6 minutes.
 
 ## Examples?
-!["list.txt"](https://ibb.co/CbJ7XGD)
-![GUI](https://ibb.co/VxR3DNK)
+!["list.txt"](https://ibb.co/CbJ7XGD) <br>
+![GUI](https://ibb.co/VxR3DNK) <br>
 ![Program use](https://ibb.co/hZf5113)
 
-## Third party information
+## Third-party information
 ```
 jsoup License
 The jsoup code-base (including source and compiled packages) are distributed under the open source MIT license as described below.
