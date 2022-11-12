@@ -32,7 +32,7 @@ For example:
 To get the data for 150 anime titles the program needs roughly 3.6 minutes.
 
 ## Examples?
-!["list.txt"](https://ibb.co/CbJ7XGD ""list.txt"") <br>
+![list.txt](https://ibb.co/CbJ7XGD "list.txt") <br>
 ![GUI](https://ibb.co/VxR3DNK "GUI") <br>
 ![Program use](https://ibb.co/hZf5113 "Program use")
 
