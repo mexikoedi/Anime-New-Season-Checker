@@ -32,6 +32,12 @@ It will get slower and slower the more anime titles you add because it needs to 
 For example: <br>
 To get the data for 150 anime titles the program needs roughly 3.6 minutes.
 
+## Is the program working correctly?
+Most of the time yes, but there are rare cases where for example a season is split in half and registered as new season or because of OVAs which are wrongly registered as new season or because of weird runtime information which were made at the IMDB website. <br>
+This is a fault of IMDB and not of the program. <br>
+If you see wrong data you could try to fix the data at the IMDB website. <br>
+I tested it with over 150 anime titles and encountered 3 wrong season information (1 season too much) and 2 weird runtime information.
+
 ## Examples?
 ![list.txt](https://i.ibb.co/mDnLMdd/example1.png "list.txt") <br>
 ![GUI](https://i.ibb.co/R3qWfzN/example2.png "GUI") <br>
