@@ -291,7 +291,7 @@ public class ANSChecker {
 	private void check() throws Exception {
 		startTime = System.nanoTime();
 
-		if (tfSeason.getText().isBlank() || !tfSeason.getText().matches("\\d+")) {
+		if (tfSeason.getText().isEmpty() || !tfSeason.getText().matches("\\d+")) {
 			JOptionPane.showMessageDialog(null, "Error: Please enter the season number!");
 			throw new Exception();
 		} else {
