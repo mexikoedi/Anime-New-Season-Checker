@@ -22,6 +22,7 @@ Before opening the .jar file open the "list.txt" file and add your anime titles 
 5) **Follow the examples below.**
 
 ## How does it work?
+After you entered a season number you need to click confirm and afterwards the search button. <br>
 The Java program connects to the given IMDB URLs and gets the data from there (seasons/runtime). <br> 
 After that it checks if the data is correct and formats it accordingly. <br>
 At the end all the data fills the text fields in the GUI.
