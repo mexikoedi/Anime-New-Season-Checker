@@ -6,7 +6,10 @@ package aNSC;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -60,7 +63,7 @@ public class ANSChecker {
 				try {
 					ANSChecker window = new ANSChecker();
 					window.frmAnimeNewSeason.setVisible(true);
-				} catch (Exception e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -70,18 +73,16 @@ public class ANSChecker {
 	/**
 	 * Create the application.
 	 * 
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	public ANSChecker() throws Exception {
+	public ANSChecker() throws IOException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
-	 * 
-	 * @throws Exception
 	 */
-	private void initialize() throws Exception {
+	private void initialize() {
 
 		/**
 		 * Frame set.
@@ -190,7 +191,7 @@ public class ANSChecker {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					check();
-				} catch (Exception e1) {
+				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "Error: Check failed!");
 					e1.printStackTrace();
 				}
@@ -286,17 +287,31 @@ public class ANSChecker {
 	 * external JSoup library. Runtime length in nanoseconds is also recorded here
 	 * and later converted to seconds.
 	 * 
-	 * @throws Exception
+	 * @throws IOException
+	 * @throw InputMismatchException
 	 */
-	private void check() throws Exception {
+	private void check() throws IOException {
 		startTime = System.nanoTime();
 
 		if (tfSeason.getText().isEmpty() || !tfSeason.getText().matches("\\d+")) {
 			JOptionPane.showMessageDialog(null, "Error: Please enter the season number!");
-			throw new Exception();
+			throw new InputMismatchException();
 		} else {
-			File file = new File("list.txt");
-			BufferedReader br = new BufferedReader(new FileReader(file));
+			File file = null;
+			BufferedReader br = null;
+
+			try {
+				file = new File("list.txt");
+				br = new BufferedReader(new FileReader(file));
+			} catch (FileNotFoundException e2) {
+				JOptionPane.showMessageDialog(null, "Error: File not found!");
+				e2.printStackTrace();
+			}
+
+			if (br == null) {
+				return;
+			}
+
 			String st;
 			int f = 0;
 
@@ -378,11 +393,24 @@ public class ANSChecker {
 	 * Internal check which searches for all anime titles from the .txt file to get
 	 * the amount as a number.
 	 * 
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	private int animeTitles() throws Exception {
-		File file = new File("list.txt");
-		BufferedReader br = new BufferedReader(new FileReader(file));
+	private int animeTitles() throws IOException {
+		File file = null;
+		BufferedReader br = null;
+
+		try {
+			file = new File("list.txt");
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e3) {
+			JOptionPane.showMessageDialog(null, "Error: File not found!");
+			e3.printStackTrace();
+		}
+
+		if (br == null) {
+			return 0;
+		}
+
 		String st;
 		int i = 0;
 
