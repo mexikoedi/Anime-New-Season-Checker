@@ -330,14 +330,14 @@ public class ANSChecker {
 					if (website.select(".ipc-simple-select__label").text().contains(" seasons")) {
 						seasonData = website.select(".ipc-simple-select__label").text();
 					} else {
-						seasonData = website.select("a.ipc-button div.ipc-button__text").text();
+						seasonData = website.select("a.ipc-btn div.ipc-btn__text").text();
 					}
 
 					if (website.select("#browse-episodes-year.ipc-simple-select__input").text().contains("See all")) {
 						yearData = website.select("#browse-episodes-year.ipc-simple-select__input").text();
 						yearData = yearData.replaceAll("[^0-9]", "");
 					} else {
-						yearData = website.select("a.ipc-button div.ipc-button__text").text();
+						yearData = website.select("a.ipc-btn div.ipc-btn__text").text();
 						yearData = yearData.replaceAll("[^0-9]", "");
 						yearData = yearData.substring(yearData.length() - 4);
 					}
