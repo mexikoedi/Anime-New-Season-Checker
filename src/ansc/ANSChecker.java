@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ANSChecker_new {
+public class ANSChecker {
 
 	/**
 	 * GUI elements
@@ -34,7 +34,6 @@ public class ANSChecker_new {
 	private JTextField tfDuration;
 	private JLabel picLoading;
 	private JLabel picLoaded;
-	private final Map<String, JTextField> tfAnimeNameMap = new HashMap<>();
 	private final Map<String, JTextField> tfAnimeSeasonMap = new HashMap<>();
 	private final Map<String, JTextField> tfAnimeRunMap = new HashMap<>();
 
@@ -68,7 +67,7 @@ public class ANSChecker_new {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
-				ANSChecker_new window = new ANSChecker_new();
+				ANSChecker window = new ANSChecker();
 				window.frmAnimeNewSeason.setVisible(true);
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Error: Check failed!");
@@ -82,7 +81,7 @@ public class ANSChecker_new {
 	 *
 	 * @throws IOException if file on ANIME_LIST_PATH is missing or corrupted
 	 */
-	public ANSChecker_new() throws IOException {
+	public ANSChecker() throws IOException {
 		this.animeList = new AnimeListReader(new File(ANIME_LIST_PATH)).getAnimeList();
 		this.initStandardGuiElements();
 	}
@@ -220,17 +219,16 @@ public class ANSChecker_new {
 		// counter is the same, but you only need one instead of one for each
 		int i = 0;
 		for (Anime anime : this.animeList) {
-			// Maps are <Key, Value>-Pairs, so u can get the TF of an anime with his name
-			this.tfAnimeNameMap.put(anime.getName(),
-					initTextField(this.dragPanel,
+			initTextField(this.dragPanel,
 							COLOR_LIGHTGREY,
 							null,
 							10, 64 + i, 502, 44,
 							FONT_ANIME_TF,
 							false,
 							anime.getName(),
-							10));
+							10);
 
+			// Maps are <Key, Value>-Pairs, so u can get the TF of an anime with his name
 			this.tfAnimeSeasonMap.put(anime.getName(),
 					initTextField(this.dragPanel,
 							COLOR_LIGHTGREY,
@@ -287,7 +285,7 @@ public class ANSChecker_new {
 			return;
 		}
 
-		// run check logic
+		// run check logic which modify the data structure
 		this.check();
 
 		/*
@@ -299,6 +297,7 @@ public class ANSChecker_new {
 		this.dragPanel.add(this.picLoaded);
 		this.dragPanel.repaint();
 
+		// refresh the gui elements for each anime
 		this.animeList.forEach(anime -> {
 			this.tfAnimeSeasonMap.get(anime.getName()).setText(anime.getSeason());
 			this.tfAnimeRunMap.get(anime.getName()).setText(anime.getRun());
@@ -329,6 +328,7 @@ public class ANSChecker_new {
 			Element seasonElement = website.getElementById("browse-episodes-season");
 
 			String seasonData;
+			// When seasonElement is null there is only one season
 			if (seasonElement != null) {
 				seasonData = seasonElement.attr("aria-label");
 			} else {
@@ -342,7 +342,7 @@ public class ANSChecker_new {
 			if (numberOfSeasons.equals(expectedNumberOfSeasons)) {
 				seasonText = "Season " + numberOfSeasons + " newest!";
 			} else {
-				seasonText = numberOfSeasons + " season!";
+				seasonText = numberOfSeasons.equals(1) ? "1 season!" : numberOfSeasons + " seasons!";
 			}
 			anime.setSeason(seasonText);
 
