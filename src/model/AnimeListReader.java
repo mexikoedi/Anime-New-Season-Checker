@@ -26,12 +26,11 @@ public class AnimeListReader {
             String animeURL;
 
             if (textLine.lastIndexOf("anime:") >= 0) {
-                animeName = textLine.substring(textLine.lastIndexOf(":") + 1);
+                animeName = textLine.substring(textLine.indexOf(":") + 1 );
 
                 textLine = br.readLine();
-                if (textLine.lastIndexOf("source:") >= 0) {
-                    String address = textLine.substring(textLine.lastIndexOf(":") + 1);
-                    animeURL = "https:" + address;
+                if (textLine != null && textLine.lastIndexOf("source:") >= 0) {
+                    animeURL = textLine.substring(textLine.indexOf(":") + 1);
                 } else {
                     throw new IOException("ERROR: File can't be parsed!");
                 }
