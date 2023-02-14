@@ -8,7 +8,7 @@ If you already use websites/applications/... which notify you every time an anim
 But otherwise if you always miss new seasons or if you are a person who uses bookmarks and checks them after sometime via manually searching in the browser for example then this might be something for you.
 
 ## How to install?
-**You need Java! Here: https://www.java.com/en/download** <br>
+**You need Java JDK 16 or higher to use this program! Here: https://www.oracle.com/de/java/technologies/javase-downloads.html** <br>
 You can download it if you select the green button named "Code" then "Download ZIP" or download the ZIP file over the releases tab. <br>
 Extract the downloaded zip folder and then open the program by opening the .jar file. <br>
 Before opening the .jar file open the "list.txt" file and add your anime titles and URLs to it. <br>
@@ -45,9 +45,9 @@ If you see wrong data you could try to fix the data at the IMDB website. <br>
 I tested it with over 160 anime titles and encountered 4 wrong season information (1 season too much) and 3 weird runtime information.
 
 ## Examples?
-![list.txt](https://ibb.co/x2s21db "list.txt") <br>
-![GUI](https://ibb.co/C87GpcG "GUI") <br>
-![Program use](https://ibb.co/jRTrtSB "Program use")
+![list.txt](https://i.ibb.co/QJcJPtV/example1.png "list.txt") <br>
+![GUI](https://i.ibb.co/zxRvWMv/example2.png "GUI") <br>
+![Program use](https://i.ibb.co/YZ3LgxY/example3.png "Program use")
 
 ## Third-party information
 ```
