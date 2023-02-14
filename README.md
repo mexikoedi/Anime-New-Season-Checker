@@ -16,33 +16,38 @@ Before opening the .jar file open the "list.txt" file and add your anime titles 
 
 ## Limitations?
 1) "list.txt" cannot be empty. <br>
-2) Don't use ":" after "anime:". <br>
-3) Only use website URLs from [IMDB](https://www.imdb.com). <br>
+2) Only use website URLs from [IMDB](https://www.imdb.com). <br>
+3) Use only correctly formatted URLS from IMDB after "source:". <br>
 4) The .jar file and the "list.txt" file need to be in the same directory. <br>
 5) **Follow the examples below.**
 
 ## How does it work?
-After you entered a season number you need to click confirm and afterwards the search button. <br>
-The Java program connects to the given IMDB URLs and gets the data from there (seasons/runtime). <br> 
+After you entered a season number you need to click the search button. <br>
+(The season number makes only sense for a small amount of anime. <br> 
+If you have many anime titles and you only want to know which one has a new season then simply type a random season number.) <br>
+The Java program connects to the IMDB URLs from the .txt file and gets the data from there (seasons/runtime). <br> 
 After that it checks if the data is correct and formats it accordingly. <br>
+If something is wrong you will be notifed via popups. <br>
 At the end all the data fills the text fields in the GUI.
 
 ## How fast is this program working?
-It will get slower and slower the more anime titles you add because it needs to connect to each IMDB URL and check every single one of them until it can fill the text fields.
+This program uses parallel stream and is therefore fast enough to process a lot of anime titles. <br>
+(A previous version of this program was single threaded and would become slower and slower the more anime titles you added.)
 
 For example: <br>
-To get the data for 150 anime titles the program needs roughly 3.6 minutes.
+To get the data for over 160 anime titles the program needs roughly **20 seconds**.
+(The previous version needed for the same amount of anime titles roughly **3.8 minutes**.)
 
 ## Is the program working correctly?
 Most of the time yes, but there are rare cases where for example a season is split in half and registered as new season or because of OVAs which are wrongly registered as new season or because of weird runtime information which were made at the IMDB website. <br>
-This is a fault of IMDB and not of the program. <br>
+This is the fault of IMDB and not of the program. <br>
 If you see wrong data you could try to fix the data at the IMDB website. <br>
-I tested it with over 150 anime titles and encountered 3 wrong season information (1 season too much) and 2 weird runtime information.
+I tested it with over 160 anime titles and encountered 4 wrong season information (1 season too much) and 3 weird runtime information.
 
 ## Examples?
-![list.txt](https://i.ibb.co/mDnLMdd/example1.png "list.txt") <br>
-![GUI](https://i.ibb.co/R3qWfzN/example2.png "GUI") <br>
-![Program use](https://i.ibb.co/12BkZJh/example3.png "Program use")
+![list.txt](https://ibb.co/x2s21db "list.txt") <br>
+![GUI](https://ibb.co/C87GpcG "GUI") <br>
+![Program use](https://ibb.co/jRTrtSB "Program use")
 
 ## Third-party information
 ```
@@ -59,6 +64,8 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-© 2022 mexikoedi 
+Thanks to [Pascal Neumann](https://github.com/neumann-dev) for the parralel stream integration and the code refactoring.
+
+© 2022-2023 mexikoedi 
 
 All rights reserved.
