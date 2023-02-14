@@ -242,6 +242,7 @@ public class ANSChecker {
 				website = Jsoup.connect(anime.getUrl()).get();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Error: " + anime.getName() + " not available!");
+				System.exit(0);
 				return;
 			}
 
