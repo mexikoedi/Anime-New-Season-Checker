@@ -32,10 +32,10 @@ At the end all the data fills the text fields in the GUI.
 
 ## How fast is this program working?
 This program uses parallel stream and is therefore fast enough to process a lot of anime titles. <br>
-(A previous version of this program was single threaded and would become slower and slower the more anime titles you added.)
+(A previous version of this program was single threaded and would become slower and slower the more anime titles you added.) <br>
 
 For example: <br>
-To get the data for over 160 anime titles the program needs roughly **20 seconds**.
+To get the data for over 160 anime titles the program needs roughly **20 seconds**. <br>
 (The previous version needed for the same amount of anime titles roughly **3.8 minutes**.)
 
 ## Is the program working correctly?
