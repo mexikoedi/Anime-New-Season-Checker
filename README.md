@@ -19,7 +19,8 @@ Before opening the .jar file open the "list.txt" file and add your anime titles 
 2) Only use website URLs from [IMDB](https://www.imdb.com). <br>
 3) Use only correctly formatted URLS from IMDB after "source:". <br>
 4) The .jar file and the "list.txt" file need to be in the same directory. <br>
-5) **Follow the examples below.**
+5) If the program unexpectedly doesn't work anymore, try using a different IP address. <br>
+6) **Follow the examples below.**
 
 ## How does it work?
 After you entered a season number you need to click the search button. <br>

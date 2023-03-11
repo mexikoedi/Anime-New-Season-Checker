@@ -274,7 +274,7 @@ public class ANSChecker {
 				yearData = website.select("#browse-episodes-year.ipc-simple-select__input").text();
 				yearData = yearData.replaceAll("[^0-9]", "");
 			} else {
-				yearData = website.select("a.ipc-btn div.ipc-btn__text").text();
+				yearData = website.select("a.ipc-btn span.ipc-btn__text").text();
 				yearData = yearData.replaceAll("[^0-9]", "");
 				yearData = yearData.substring(yearData.length() - 4);
 			}
