@@ -115,7 +115,9 @@ public class ANSChecker {
 		DragLayout dl_dragPanel = new DragLayout();
 		dl_dragPanel.setUsePreferredSize(false);
 		this.dragPanel = new JPanel(dl_dragPanel);
-		this.frmAnimeNewSeason.getContentPane().add(new JScrollPane(dragPanel));
+		JScrollPane scrollPane = new JScrollPane(dragPanel);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		this.frmAnimeNewSeason.getContentPane().add(scrollPane);
 
 		/*
 		 * Now all elements in the JFrame are being set and added to the DragLayout.
