@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnimeListReader {
-
 	File animeListFile;
 	List<Anime> animeList;
 
@@ -14,10 +13,13 @@ public class AnimeListReader {
 		this.animeList = this.parseAnimeList();
 	}
 
+	public List<Anime> getAnimeList() {
+		return animeList;
+	}
+
 	private List<Anime> parseAnimeList() throws IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(animeListFile))) {
 			List<Anime> result = new ArrayList<>();
-
 			String textLine;
 
 			while ((textLine = br.readLine()) != null) {
@@ -26,8 +28,8 @@ public class AnimeListReader {
 
 				if (textLine.lastIndexOf("anime:") >= 0) {
 					animeName = textLine.substring(textLine.indexOf(":") + 1);
-
 					textLine = br.readLine();
+
 					if (textLine != null && textLine.lastIndexOf("source:") >= 0) {
 						animeURL = textLine.substring(textLine.indexOf(":") + 1);
 					} else {
@@ -40,9 +42,5 @@ public class AnimeListReader {
 
 			return result;
 		}
-	}
-
-	public List<Anime> getAnimeList() {
-		return animeList;
 	}
 }

@@ -19,13 +19,13 @@ Before opening the .jar file open the "list.txt" file and add your anime titles 
 2) Only use website URLs from [IMDB](https://www.imdb.com). <br>
 3) Use only correctly formatted URLS from IMDB after "source:". <br>
 4) The .jar file and the "list.txt" file need to be in the same directory. <br>
-5) If the program unexpectedly doesn't work anymore, try using a different IP address. <br>
-6) **Follow the examples below.**
+5) **Follow the examples below.**
 
 ## How does it work?
 After you entered a season number you need to click the search button. <br>
 (The season number makes only sense for a small amount of anime. <br> 
-If you have many anime titles and you only want to know which one has a new season then simply type a random season number.) <br>
+If you have many anime titles and you only want to know which one has a new season then you don't need to enter a season number. <br> 
+The season number is optional.) <br>
 The Java program connects to the IMDB URLs from the .txt file and gets the data from there (seasons/runtime). <br> 
 After that it checks if the data is correct and formats it accordingly. <br>
 If something is wrong you will be notifed via popups. <br>
@@ -56,7 +56,7 @@ jsoup License
 The jsoup code-base (including source and compiled packages) are distributed under the open source MIT license as described below.
 
 The MIT License
-Copyright © 2009 - 2022 Jonathan Hedley (https://jsoup.org/)
+Copyright © 2009 - 2024 Jonathan Hedley (https://jsoup.org/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
