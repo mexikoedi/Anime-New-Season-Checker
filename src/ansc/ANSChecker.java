@@ -3,11 +3,9 @@ package ansc;
 // Imports
 import model.Anime;
 import model.AnimeListReader;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -72,8 +70,8 @@ public class ANSChecker {
 				ANSChecker window = new ANSChecker();
 				window.frmAnimeNewSeason.setVisible(true);
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error: Check failed! Text file missing?");
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Check failed! Text file missing?", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 	}
@@ -82,6 +80,13 @@ public class ANSChecker {
 	 * Initialize the contents of the frame.
 	 */
 	private void initStandardGuiElements() {
+		// UI set
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			showDialog("Unexpected error in UI adjustment! Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+		}
 		// Frame set
 		this.frmAnimeNewSeason = new JFrame();
 		this.frmAnimeNewSeason.setResizable(false);
@@ -198,14 +203,13 @@ public class ANSChecker {
 		}
 
 		if (!tfSeason.getText().isEmpty() && !tfSeason.getText().matches("\\d")) {
-			JOptionPane.showMessageDialog(null, "Error: Please enter a valid season number!");
+			showDialog("Please enter a valid season number!", "Warning", JOptionPane.INFORMATION_MESSAGE);
 
 			return;
 		}
 
 		// Run check logic which modifies the data structure
 		this.check();
-
 		/*
 		 * The picLoading removed from the DragLayout (not visible now) and picLoaded
 		 * added instead (visible now).
@@ -243,6 +247,8 @@ public class ANSChecker {
 
 		this.animeList = this.animeList.parallelStream().peek(anime -> {
 			Document website = null;
+			String url = anime.getUrl();
+			String name = anime.getName();
 
 			try {
 				// Synchronize the delay to avoid multiple threads pausing at the same time
@@ -258,13 +264,25 @@ public class ANSChecker {
 					}
 				}
 
+				if ((url == null || url.isEmpty()) && (name == null || name.isEmpty())) {
+					showDialog("No URL and name found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					return;
+				} else if (url == null || url.isEmpty()) {
+					showDialog("No URL for " + name + " found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					return;
+				} else if (name == null || name.isEmpty()) {
+					showDialog("No name for " + url + " found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					return;
+				}
+
 				// Web request
 				website = Jsoup.connect(anime.getUrl()).get();
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null,
-						"Error: " + anime.getName() + " not available! Check URL or try again later?");
-				e.printStackTrace();
-				System.exit(1);
+				showDialog(anime.getName() + " not available! Check URL or try again later?", "Error",
+						JOptionPane.ERROR_MESSAGE);
 
 				return;
 			}
@@ -323,5 +341,12 @@ public class ANSChecker {
 
 		String runtime = yearData.replaceAll("(.{" + 4 + "})", "$1 ").trim();
 		anime.setRun(runtime);
+	}
+
+	/**
+	 * Helper function to display a dialog message without blocking the Thread.
+	 */
+	private void showDialog(String message, String title, int messageType) {
+		SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, message, title, messageType));
 	}
 }
