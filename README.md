@@ -67,6 +67,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Thanks to [Pascal Neumann](https://github.com/neumann-dev) for the parralel stream integration and the code refactoring.
 
-© 2022-2024 mexikoedi 
+© 2022-2025 mexikoedi 
 
 All rights reserved.
