@@ -8,15 +8,34 @@ public class AnimeListReader {
 	File animeListFile;
 	List<Anime> animeList;
 
+	/*
+	 * The AnimeListReader class reads the anime list from a file and stores it in a
+	 * list.
+	 * 
+	 * @param animeListFile The file containing the anime list
+	 * @throws IOException if the file can't be read or parsed correctly
+	 */
 	public AnimeListReader(File animeListFile) throws IOException {
 		this.animeListFile = animeListFile;
 		this.animeList = this.parseAnimeList();
 	}
 
+	/*
+	 * This method returns the anime list as a list of Anime objects.
+	 * 
+	 * @return The anime list as a list of Anime objects
+	 */
 	public List<Anime> getAnimeList() {
 		return animeList;
 	}
 
+	/*
+	 * This method reads the anime list from the file and returns it as a list of
+	 * Anime objects.
+	 * 
+	 * @return The anime list as a list of Anime objects
+	 * @throws IOException if the file can't be read or parsed correctly
+	 */
 	private List<Anime> parseAnimeList() throws IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(animeListFile))) {
 			List<Anime> result = new ArrayList<>();

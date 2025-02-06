@@ -36,8 +36,9 @@ This program uses parallel stream and is therefore fast enough to process a lot 
 (A previous version of this program was single threaded and would become slower and slower the more anime titles you added.) <br>
 
 For example: <br>
-To get the data for over 160 anime titles the program needs roughly **20 seconds**. <br>
-(The previous version needed for the same amount of anime titles roughly **3.8 minutes**.)
+To get the data for over 230 anime titles the program needs roughly **1.3 minutes**. <br>
+(One of the first versions needed for the same amount of anime titles roughly **5.7 minutes**.) <br>
+(The program was once even faster, but because the server blocks too many requests, a safeguard was implemented that caps the maximum requests to prevent this issue.)
 
 ## Is the program working correctly?
 Most of the time yes, but there are rare cases where for example a season is split in half and registered as new season or because of OVAs which are wrongly registered as new season or because of weird runtime information which were made at the IMDB website. <br>
