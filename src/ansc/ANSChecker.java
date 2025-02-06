@@ -472,7 +472,7 @@ public class ANSChecker {
 	}
 
 	/**
-	 * This method is used to save the data in a JSON file sorted alphabetically.
+	 * This method is used to save the data in a JSON file.
 	 * 
 	 * @param animeList The list of anime objects to be exported.
 	 */
