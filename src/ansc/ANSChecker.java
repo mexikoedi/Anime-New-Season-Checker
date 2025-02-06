@@ -45,7 +45,7 @@ public class ANSChecker {
 	private JLabel picLoaded;
 	// Data structure
 	private List<Anime> animeList;
-	// Runtime variables
+	// Class variables
 	private long startTime = 0;
 	private long duration = 0;
 	private boolean hasExecutedOnce = false;
