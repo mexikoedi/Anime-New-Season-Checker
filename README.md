@@ -47,9 +47,9 @@ If you see wrong data you could try to fix the data at the IMDB website. <br>
 I tested it with over 160 anime titles and encountered 4 wrong season information (1 season too much) and 3 weird runtime information.
 
 ## Examples?
-![list.txt](https://i.ibb.co/QJcJPtV/example1.png "list.txt") <br>
-![GUI](https://i.ibb.co/zxRvWMv/example2.png "GUI") <br>
-![Program use](https://i.ibb.co/YZ3LgxY/example3.png "Program use")
+![list.txt](https://github.com/user-attachments/assets/8403c690-8e08-42d7-acf1-85c22e744fd0 "list.txt") <br>
+![GUI](https://github.com/user-attachments/assets/495364e3-9da1-41ea-9a10-39872834e62b "GUI") <br>
+![Program use](https://github.com/user-attachments/assets/c7faf22d-8453-4bae-9aa0-4142cc825c5e "Program use")
 
 ## Third-party information
 ```
