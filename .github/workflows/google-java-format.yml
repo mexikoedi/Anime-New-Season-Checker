@@ -24,4 +24,5 @@ jobs:
           java-version: 21
       - uses: axel-op/googlejavaformat-action@v4
         with:
+          files-excluded: "**/module-info.java"
           github-token: ${{ secrets.GITHUB_TOKEN }}
