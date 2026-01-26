@@ -14,7 +14,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
-          cache: 'gradle'
+          cache: 'maven'
           server-id: github
           settings-path: ${{ github.workspace }}
       - uses: axel-op/googlejavaformat-action@v4
