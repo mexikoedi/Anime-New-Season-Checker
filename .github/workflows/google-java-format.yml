@@ -11,7 +11,7 @@ jobs:
 
     # GitHub token permissions
     permissions:
-      contents: read
+      contents: write
     
     steps:
       - uses: actions/checkout@v6.0.2
@@ -22,5 +22,4 @@ jobs:
           java-version: 21
       - uses: axel-op/googlejavaformat-action@v4
         with:
-          skip-commit: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
