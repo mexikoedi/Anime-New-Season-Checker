@@ -10,7 +10,7 @@ But otherwise if you always miss new seasons or if you are a person who uses boo
 ## How to install?
 **You need [Java JDK 22](https://www.oracle.com/java/technologies/downloads/) or higher to use this program!** <br>
 You can download it if you select the green button named "Code" then "Download ZIP" or download the ZIP file over the releases tab. <br>
-Extract the downloaded zip folder and then open the program by opening the .jar file. <br>
+Extract the downloaded ZIP file and then open the program by opening the .jar file. <br>
 Before opening the .jar file open the "list.txt" file and add your anime titles and URLs to it. <br>
 **Read below for more important information.**
 
