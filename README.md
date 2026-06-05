@@ -47,9 +47,9 @@ If you see wrong data you could try to fix the data at the TMDB website. <br>
 I tested it with almost 300 anime titles and encountered 9 wrong season information (multiple seasons showed as one).
 
 ## Examples?
-![list.txt](https://github.com/user-attachments/assets/8403c690-8e08-42d7-acf1-85c22e744fd0 "list.txt") <br>
-![GUI](https://github.com/user-attachments/assets/495364e3-9da1-41ea-9a10-39872834e62b "GUI") <br>
-![Program use](https://github.com/user-attachments/assets/c7faf22d-8453-4bae-9aa0-4142cc825c5e "Program use")
+![list.txt](https://github.com/user-attachments/assets/0a5fbd95-8e52-48e8-94c3-df6f88660d0d "list.txt") <br>
+![GUI](https://github.com/user-attachments/assets/c2372a7a-eaf7-4f7f-91a1-985aad0204bd "GUI") <br>
+![Program use](https://github.com/user-attachments/assets/c0a42b70-1236-4b27-b39f-13eba32d6bcd "Program use")
 
 ## Third-party information
 ```
