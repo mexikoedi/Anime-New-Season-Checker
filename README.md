@@ -16,8 +16,8 @@ Before opening the .jar file open the "list.txt" file and add your anime titles 
 
 ## Limitations?
 1) "list.txt" cannot be empty. <br>
-2) Only use website URLs from [IMDB](https://www.imdb.com). <br>
-3) Use only correctly formatted URLS from IMDB after "source:". <br>
+2) Only use website URLs from [TMDB](https://www.themoviedb.org/). <br>
+3) Use only correctly formatted URLS from TMDB after "source:". <br>
 4) The .jar file and the "list.txt" file need to be in the same directory. <br>
 5) **Follow the examples below.**
 
@@ -26,25 +26,25 @@ After you entered a season number you need to click the search button. <br>
 (The season number makes only sense for a small amount of anime. <br> 
 If you have many anime titles and you only want to know which one has a new season then you don't need to enter a season number. <br> 
 The season number is optional.) <br>
-The Java program connects to the IMDB URLs from the .txt file and gets the data from there (seasons/runtime). <br> 
+The Java program connects to the TMDB URLs from the .txt file and gets the data from there (seasons/runtime). <br> 
 After that it checks if the data is correct and formats it accordingly. <br>
 If something is wrong you will be notifed via popups. <br>
-At the end all the data fills the text fields in the GUI.
+At the end all the data fills the text fields in the GUI. <br>
+The results are cached to avoid unnecessary requests. <br>
+You can also export the results.
 
 ## How fast is this program working?
 This program uses parallel stream and is therefore fast enough to process a lot of anime titles. <br>
-(A previous version of this program was single threaded and would become slower and slower the more anime titles you added.) <br>
 
 For example: <br>
-To get the data for over 230 anime titles the program needs roughly **1.3 minutes**. <br>
-(One of the first versions needed for the same amount of anime titles roughly **5.7 minutes**.) <br>
-(The program was once even faster, but because the server blocks too many requests, a safeguard was implemented that caps the maximum requests to prevent this issue.)
+To get the data for almost 300 anime titles the program needs roughly **5.6 minutes**. <br>
+The program can be even faster, but because the server blocks too many requests, a safeguard was implemented that caps the maximum requests to prevent this issue.
 
 ## Is the program working correctly?
-Most of the time yes, but there are rare cases where for example a season is split in half and registered as new season or because of OVAs which are wrongly registered as new season or because of weird runtime information which were made at the IMDB website. <br>
-This is the fault of IMDB and not of the program. <br>
-If you see wrong data you could try to fix the data at the IMDB website. <br>
-I tested it with over 160 anime titles and encountered 4 wrong season information (1 season too much) and 3 weird runtime information.
+Most of the time yes, but there are rare cases in which, for example, only one season is shown instead of multiple ones. There are also cases in which weird runtime information is displayed. <br>
+This is the fault of TMDB and not of the program. <br>
+If you see wrong data you could try to fix the data at the TMDB website. <br>
+I tested it with almost 300 anime titles and encountered 9 wrong season information (multiple seasons showed as one).
 
 ## Examples?
 ![list.txt](https://github.com/user-attachments/assets/8403c690-8e08-42d7-acf1-85c22e744fd0 "list.txt") <br>

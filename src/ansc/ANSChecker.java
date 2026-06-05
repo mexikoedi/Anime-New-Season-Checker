@@ -8,17 +8,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import model.Anime;
 import model.AnimeListReader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class ANSChecker {
   // Maps
@@ -33,6 +37,8 @@ public class ANSChecker {
   private final Font FONT_ANIME_TF = new Font("Tahoma", Font.BOLD, 13);
   private final String ANIME_LIST_PATH = "list.txt";
   private final String ANIME_EXPORT_DIR = "ansc_export";
+  private final String ANIME_CACHE_DIR = "ansc_cache";
+  private final long ANIME_CACHED_TIME = 24 * 60 * 60 * 1000; 
   // GUI elements
   private JFrame frmAnimeNewSeason;
   private JPanel dragPanel;
@@ -395,8 +401,50 @@ public class ANSChecker {
       tfSeason.setText("");
     }
 
+    // 1) Check if all anime are cached
+    boolean allCached = true;
+
+    for (Anime anime : animeList) {
+      String cacheFile = getCacheFileName(anime.getName());
+
+      if (!isCacheValid(cacheFile, ANIME_CACHED_TIME)) {
+        allCached = false;
+
+        break;
+      }
+    }
+
+    // 2) If all cached AND not executed once yet -> Load from cache + fill GUI -> Skip scraping
+    if (allCached && !hasExecutedOnce) {
+      for (Anime anime : animeList) {
+        String cacheFile = getCacheFileName(anime.getName());
+        loadFromCache(cacheFile, anime);
+      }
+
+      // Update GUI
+      animeList.forEach(
+          a -> {
+            tfAnimeSeasonMap.get(a.getName()).setText(a.getSeason());
+            tfAnimeRunMap.get(a.getName()).setText(a.getRun());
+          });
+
+      hasExecutedOnce = true;
+
+      return;
+    }
+
+    // 3) If all cached AND already executed once -> Block scraping and show dialog that cache is
+    // still valid
+    if (allCached && hasExecutedOnce) {
+      showDialog("Cache is not expired yet!", "Information", JOptionPane.INFORMATION_MESSAGE);
+
+      return;
+    }
+
+    // Season number check
     if (!tfSeason.getText().isEmpty() && !tfSeason.getText().matches("\\d")) {
-      showDialog("Please enter a valid season number!", "Warning", JOptionPane.INFORMATION_MESSAGE);
+      showDialog(
+          "Please enter a valid season number!", "Information", JOptionPane.INFORMATION_MESSAGE);
 
       return;
     }
@@ -407,7 +455,7 @@ public class ANSChecker {
 
   /**
    * Internal check which searches for new anime titles from the .txt file and gets all the data
-   * (seasons/years) from the IMDB website with the help of the external JSoup library. It also uses
+   * (seasons/years) from the TMDB website with the help of the external JSoup library. It also uses
    * a maximum amount of requests and a random delay to avoid issues like for example Error 503.
    * Runtime length in milliseconds is also recorded here and later converted to seconds if needed.
    * The SwingWorker is used to process the long task in the background and publish the results in
@@ -441,7 +489,7 @@ public class ANSChecker {
             }
 
             // Maximum amount of requests before pause
-            final int batchSize = 25;
+            final int batchSize = 5;
             // Random delay between 5 and 8 seconds used for the pause
             final int delayMillis = (int) Math.floor(Math.random() * (8000 - 5000 + 1) + 5000);
             /*
@@ -498,8 +546,17 @@ public class ANSChecker {
                               return;
                             }
 
-                            // Web request
-                            website = Jsoup.connect(anime.getUrl()).get();
+                            // Check cache before making the web request to avoid unnecessary requests
+                            String cacheFileName = getCacheFileName(name);
+                            boolean cached = isCacheValid(cacheFileName, ANIME_CACHED_TIME);
+
+                            if (cached) {
+                              loadFromCache(cacheFileName, anime);
+                            } else {
+                              website = Jsoup.connect(anime.getUrl()).get();
+                              processAnimeData(anime, website);
+                              saveToCache(cacheFileName, anime);
+                            }
                           } catch (IOException e) {
                             showDialog(
                                 anime.getName() + " not available! Check URL or try again later?",
@@ -592,18 +649,49 @@ public class ANSChecker {
    * @param website The website document to extract the data from.
    */
   private void processAnimeData(Anime anime, Document website) {
-    // Format: "%d seasons"
-    Element seasonElement = website.getElementById("browse-episodes-season");
-    String seasonData;
+    // All seasons (including specials) are selected
+    Elements rawBlocks = website.select("div.season_wrapper section.panel div.season div.content");
+    List<Element> seasonBlocks = new ArrayList<>();
+    Pattern numPattern = Pattern.compile("(\\d+)");
+    // Season or Staffel, number in group 2, case insensitive
+    Pattern seasonInOverview =
+        Pattern.compile("(Season|Staffel)\\s+(\\d+)", Pattern.CASE_INSENSITIVE);
 
-    // When seasonElement is null there is only one season
-    if (seasonElement != null) {
-      seasonData = seasonElement.attr("aria-label");
-    } else {
-      seasonData = "1 season";
+    for (Element block : rawBlocks) {
+      int seasonNumber = -1;
+      // 1) Try: Number from the title (h2 > a)
+      Element h2a = block.selectFirst("h2 > a");
+
+      if (h2a != null) {
+        Matcher m = numPattern.matcher(h2a.text());
+
+        if (m.find()) {
+          seasonNumber = Integer.parseInt(m.group(1));
+        }
+      }
+
+      // 2) Fallback: Number from the description (div.season_overview > p)
+      if (seasonNumber == -1) {
+        Element overviewP = block.selectFirst("div.season_overview > p");
+
+        if (overviewP != null) {
+          String overviewText = overviewP.text().trim();
+          Matcher m = seasonInOverview.matcher(overviewText);
+
+          if (m.find()) {
+            // Group 2 is the number after Season/Staffel
+            seasonNumber = Integer.parseInt(m.group(2));
+          }
+        }
+      }
+
+      // Specials (Season/Staffel 0) and everything without a valid number is ignored
+      if (seasonNumber >= 1) {
+        seasonBlocks.add(block);
+      }
     }
 
-    Integer numberOfSeasons = Integer.valueOf((seasonData.split(" "))[0]);
+    int numberOfSeasons = seasonBlocks.size();
     Integer expectedNumberOfSeasons = null;
 
     if (!this.tfSeason.getText().isEmpty()) {
@@ -612,28 +700,30 @@ public class ANSChecker {
 
     String seasonText;
 
-    if (expectedNumberOfSeasons == null || numberOfSeasons.equals(expectedNumberOfSeasons)) {
+    if (expectedNumberOfSeasons == null || numberOfSeasons == expectedNumberOfSeasons) {
       seasonText = "Season " + numberOfSeasons + " newest!";
     } else {
-      seasonText = numberOfSeasons.equals(1) ? "1 season!" : numberOfSeasons + " seasons!";
+      seasonText = numberOfSeasons == 1 ? "1 season!" : numberOfSeasons + " seasons!";
     }
 
     anime.setSeason(seasonText);
-    String yearData;
+    // Extract years from the season blocks
+    List<String> years = new ArrayList<>();
+    Pattern yearPattern = Pattern.compile("(\\d{4}|—|-)");
 
-    if (website
-        .select("#browse-episodes-year.ipc-simple-select__input")
-        .text()
-        .contains("See all")) {
-      yearData = website.select("#browse-episodes-year.ipc-simple-select__input").text();
-      yearData = yearData.replaceAll("[^0-9]", "");
-    } else {
-      yearData = website.select("a.ipc-btn span.ipc-btn__text").text();
-      yearData = yearData.replaceAll("[^0-9]", "");
-      yearData = yearData.substring(yearData.length() - 4);
+    for (Element block : seasonBlocks) {
+      Element h4 = block.selectFirst("h4");
+      if (h4 == null) continue;
+      // Only the direct text in h4, without the rating div
+      String text = h4.ownText().trim(); // e.g. "2015 • 13 Episoden" -> "2015"
+      Matcher ym = yearPattern.matcher(text);
+
+      if (ym.find()) {
+        years.add(ym.group(1));
+      }
     }
 
-    String runtime = yearData.replaceAll("(.{" + 4 + "})", "$1 ").trim();
+    String runtime = String.join(" ", years);
     anime.setRun(runtime);
   }
 
@@ -643,6 +733,28 @@ public class ANSChecker {
    * @param animeList The list of anime objects to be exported.
    */
   private void exportData(List<Anime> animeList) {
+    boolean cacheValid = true;
+
+    // Check if all anime are cached and the cache is still valid before exporting
+    for (Anime anime : animeList) {
+      String cacheFileName = getCacheFileName(anime.getName());
+
+      if (!isCacheValid(cacheFileName, ANIME_CACHED_TIME)) {
+        cacheValid = false;
+
+        break;
+      }
+    }
+
+    if (!cacheValid) {
+      showDialog(
+          "The cache has expired. Please scrape the data again before exporting!",
+          "Information",
+          JOptionPane.INFORMATION_MESSAGE);
+
+      return;
+    }
+
     File exportDir = new File(ANIME_EXPORT_DIR);
 
     if (!exportDir.exists()) {
@@ -717,6 +829,97 @@ public class ANSChecker {
           "The data has already been exported and has not changed!",
           "Information",
           JOptionPane.INFORMATION_MESSAGE);
+    }
+  }
+
+  /**
+   * This method generates the cache file name for a given anime name by replacing all
+   * non-alphanumeric characters with underscores and appending the .cache extension. The cache
+   * files are stored in the ANIME_CACHE_DIR directory.
+   *
+   * @param animeName The name of the anime for which the cache file name is to be generated.
+   * @return The generated cache file name for the given anime name.
+   */
+  private String getCacheFileName(String animeName) {
+    return ANIME_CACHE_DIR + "/" + animeName.replaceAll("[^a-zA-Z0-9]", "_") + ".cache";
+  }
+
+  /**
+   * This method checks if the cache file for a given anime is valid by verifying its existence and
+   * comparing the timestamp in the cache file with the current time to determine if it has expired
+   * based on the specified cache duration.
+   *
+   * @param cacheFileName The name of the cache file to be checked for validity.
+   * @param cacheDurationMillis The duration in milliseconds for which the cache is considered
+   *     valid.
+   * @return true if the cache is valid (exists and not expired), false otherwise.
+   */
+  private boolean isCacheValid(String cacheFileName, long cacheDurationMillis) {
+    File cacheFile = new File(cacheFileName);
+
+    if (!cacheFile.exists()) {
+      return false;
+    }
+
+    try {
+      List<String> lines = Files.readAllLines(Paths.get(cacheFileName));
+      long timestamp = Long.parseLong(lines.get(0));
+      long currentTime = System.currentTimeMillis();
+
+      return (currentTime - timestamp) < cacheDurationMillis;
+    } catch (IOException | NumberFormatException e) {
+      showDialog(
+          "Error checking cache for " + cacheFileName + "!", "Error", JOptionPane.ERROR_MESSAGE);
+
+      return false;
+    }
+  }
+
+  /**
+   * This method saves the anime data (season and runtime) to a cache file with the specified name.
+   *
+   * @param cacheFileName The name of the cache file where the anime data will be saved.
+   * @param anime The anime object containing the data (season and runtime) that will be saved to
+   *     the cache file.
+   */
+  private void saveToCache(String cacheFileName, Anime anime) {
+    File cacheDir = new File(ANIME_CACHE_DIR);
+
+    if (!cacheDir.exists()) {
+      cacheDir.mkdir();
+    }
+
+    try (FileWriter writer = new FileWriter(cacheFileName)) {
+      writer.write(System.currentTimeMillis() + System.lineSeparator());
+      writer.write(anime.getSeason() + System.lineSeparator());
+      writer.write(anime.getRun() + System.lineSeparator());
+    } catch (IOException e) {
+      showDialog(
+          "Error saving cache for " + cacheFileName + "!", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  /**
+   * This method loads the anime data (season and runtime) from a cache file with the specified
+   * name.
+   *
+   * @param cacheFileName The name of the cache file from which the anime data will be loaded.
+   * @param anime The anime object where the loaded data (season and runtime) will be set.
+   * @return The anime object with the loaded data from the cache file.
+   */
+  private Anime loadFromCache(String cacheFileName, Anime anime) {
+    try {
+      List<String> lines = Files.readAllLines(Paths.get(cacheFileName));
+      lines.remove(0);
+      anime.setSeason(lines.get(0));
+      anime.setRun(lines.get(1));
+
+      return anime;
+    } catch (IOException e) {
+      showDialog(
+          "Error loading cache for " + cacheFileName + "!", "Error", JOptionPane.ERROR_MESSAGE);
+
+      return anime;
     }
   }
 

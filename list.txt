@@ -1,8 +1,8 @@
 anime:Nisekoi
-source:https://www.imdb.com/title/tt3115338
+source:https://www.themoviedb.org/tv/62640-nisekoi/seasons
 
 anime:Charlotte
-source:https://www.imdb.com/title/tt4574736
+source:https://www.themoviedb.org/tv/63145-charlotte/seasons
 
 anime:Nagi no Asukara
-source:https://www.imdb.com/title/tt3104236
+source:https://www.themoviedb.org/tv/61408-nagi-no-asukara/seasons
