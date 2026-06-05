@@ -38,7 +38,7 @@ public class ANSChecker {
   private final String ANIME_LIST_PATH = "list.txt";
   private final String ANIME_EXPORT_DIR = "ansc_export";
   private final String ANIME_CACHE_DIR = "ansc_cache";
-  private final long ANIME_CACHED_TIME = 24 * 60 * 60 * 1000; 
+  private final long ANIME_CACHED_TIME = 24 * 60 * 60 * 1000;
   // GUI elements
   private JFrame frmAnimeNewSeason;
   private JPanel dragPanel;
@@ -546,7 +546,8 @@ public class ANSChecker {
                               return;
                             }
 
-                            // Check cache before making the web request to avoid unnecessary requests
+                            // Check cache before making the web request to avoid unnecessary
+                            // requests
                             String cacheFileName = getCacheFileName(name);
                             boolean cached = isCacheValid(cacheFileName, ANIME_CACHED_TIME);
 
