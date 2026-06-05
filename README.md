@@ -23,9 +23,8 @@ Before opening the .jar file open the "list.txt" file and add your anime titles 
 
 ## How does it work?
 After you entered a season number you need to click the search button. <br>
-(The season number makes only sense for a small amount of anime. <br> 
-If you have many anime titles and you only want to know which one has a new season then you don't need to enter a season number. <br> 
-The season number is optional.) <br>
+(The season number is optional and makes only sense for a small amount of anime. <br> 
+If you have many anime titles and you only want to know which one has a new season then you don't need to enter a season number.) <br>
 The Java program connects to the TMDB URLs from the .txt file and gets the data from there (seasons/runtime). <br> 
 After that it checks if the data is correct and formats it accordingly. <br>
 If something is wrong you will be notifed via popups. <br>
