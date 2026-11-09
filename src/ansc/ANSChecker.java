@@ -68,16 +68,15 @@ public class ANSChecker {
 
   /** Launch the application. */
   public static void main(String[] args) {
-    EventQueue.invokeLater(
-        () -> {
-          try {
-            ANSChecker window = new ANSChecker();
-            window.frmAnimeNewSeason.setVisible(true);
-          } catch (IOException e) {
-            JOptionPane.showMessageDialog(
-                null, "Check failed! Text file missing?", "Error", JOptionPane.ERROR_MESSAGE);
-          }
-        });
+    EventQueue.invokeLater(() -> {
+      try {
+        ANSChecker window = new ANSChecker();
+        window.frmAnimeNewSeason.setVisible(true);
+      } catch (IOException e) {
+        JOptionPane.showMessageDialog(
+            null, "Check failed! Text file missing?", "Error", JOptionPane.ERROR_MESSAGE);
+      }
+    });
   }
 
   /** Initialize the contents of the frame. */
@@ -422,11 +421,10 @@ public class ANSChecker {
       }
 
       // Update GUI
-      animeList.forEach(
-          a -> {
-            tfAnimeSeasonMap.get(a.getName()).setText(a.getSeason());
-            tfAnimeRunMap.get(a.getName()).setText(a.getRun());
-          });
+      animeList.forEach(a -> {
+        tfAnimeSeasonMap.get(a.getName()).setText(a.getSeason());
+        tfAnimeRunMap.get(a.getName()).setText(a.getRun());
+      });
 
       hasExecutedOnce = true;
 
@@ -503,79 +501,72 @@ public class ANSChecker {
 
             animeList =
                 animeList.parallelStream()
-                    .peek(
-                        anime -> {
-                          Document website = null;
-                          String url = anime.getUrl();
-                          String name = anime.getName();
+                    .peek(anime -> {
+                      Document website = null;
+                      String url = anime.getUrl();
+                      String name = anime.getName();
 
-                          try {
-                            // Synchronize the delay to avoid multiple threads pausing at the same
-                            // time
-                            synchronized (requestCounter) {
-                              // Check if the request counter has reached the batch size, then pause
-                              if (requestCounter.incrementAndGet() % batchSize == 0) {
-                                try {
-                                  Thread.sleep(delayMillis);
-                                } catch (InterruptedException e) {
-                                  // Restore the interrupted status
-                                  Thread.currentThread().interrupt();
-                                }
-                              }
+                      try {
+                        // Synchronize the delay to avoid multiple threads pausing at the same
+                        // time
+                        synchronized (requestCounter) {
+                          // Check if the request counter has reached the batch size, then pause
+                          if (requestCounter.incrementAndGet() % batchSize == 0) {
+                            try {
+                              Thread.sleep(delayMillis);
+                            } catch (InterruptedException e) {
+                              // Restore the interrupted status
+                              Thread.currentThread().interrupt();
                             }
-
-                            if ((url == null || url.isEmpty())
-                                && (name == null || name.isEmpty())) {
-                              showDialog(
-                                  "No URL and name found!", "Error", JOptionPane.ERROR_MESSAGE);
-
-                              return;
-                            } else if (url == null || url.isEmpty()) {
-                              showDialog(
-                                  "No URL for " + name + " found!",
-                                  "Error",
-                                  JOptionPane.ERROR_MESSAGE);
-
-                              return;
-                            } else if (name == null || name.isEmpty()) {
-                              showDialog(
-                                  "No name for " + url + " found!",
-                                  "Error",
-                                  JOptionPane.ERROR_MESSAGE);
-
-                              return;
-                            }
-
-                            // Check cache before making the web request to avoid unnecessary
-                            // requests
-                            String cacheFileName = getCacheFileName(name);
-                            boolean cached = isCacheValid(cacheFileName, ANIME_CACHED_TIME);
-
-                            if (cached) {
-                              loadFromCache(cacheFileName, anime);
-                            } else {
-                              website = Jsoup.connect(anime.getUrl()).get();
-                              processAnimeData(anime, website);
-                              saveToCache(cacheFileName, anime);
-                            }
-                          } catch (IOException e) {
-                            showDialog(
-                                anime.getName() + " not available! Check URL or try again later?",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
-
-                            return;
                           }
+                        }
 
-                          // Process the website to extract the data
+                        if ((url == null || url.isEmpty()) && (name == null || name.isEmpty())) {
+                          showDialog("No URL and name found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+                          return;
+                        } else if (url == null || url.isEmpty()) {
+                          showDialog(
+                              "No URL for " + name + " found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+                          return;
+                        } else if (name == null || name.isEmpty()) {
+                          showDialog(
+                              "No name for " + url + " found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+                          return;
+                        }
+
+                        // Check cache before making the web request to avoid unnecessary
+                        // requests
+                        String cacheFileName = getCacheFileName(name);
+                        boolean cached = isCacheValid(cacheFileName, ANIME_CACHED_TIME);
+
+                        if (cached) {
+                          loadFromCache(cacheFileName, anime);
+                        } else {
+                          website = Jsoup.connect(anime.getUrl()).get();
                           processAnimeData(anime, website);
-                          // Progress update and conversion to percentage
-                          int currentProgress = progress.incrementAndGet();
-                          int progressPercentage =
-                              (int) ((currentProgress / (double) totalAnimeTitles) * 100);
-                          // Publish progress and send to GUI (SwingWorker)
-                          publish(progressPercentage);
-                        })
+                          saveToCache(cacheFileName, anime);
+                        }
+                      } catch (IOException e) {
+                        showDialog(
+                            anime.getName() + " not available! Check URL or try again later?",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+
+                        return;
+                      }
+
+                      // Process the website to extract the data
+                      processAnimeData(anime, website);
+                      // Progress update and conversion to percentage
+                      int currentProgress = progress.incrementAndGet();
+                      int progressPercentage =
+                          (int) ((currentProgress / (double) totalAnimeTitles) * 100);
+                      // Publish progress and send to GUI (SwingWorker)
+                      publish(progressPercentage);
+                    })
                     .toList();
 
             return null;
@@ -596,47 +587,43 @@ public class ANSChecker {
              * added instead (visible now) and the GUI elements for each anime are being
              * updated.
              */
-            SwingUtilities.invokeLater(
-                () -> {
-                  dragPanel.remove(picLoading);
-                  picLoaded.setBounds(1102, 414, 274, 193);
-                  dragPanel.add(picLoaded);
-                  dragPanel.repaint();
+            SwingUtilities.invokeLater(() -> {
+              dragPanel.remove(picLoading);
+              picLoaded.setBounds(1102, 414, 274, 193);
+              dragPanel.add(picLoaded);
+              dragPanel.repaint();
 
-                  animeList.forEach(
-                      anime -> {
-                        tfAnimeSeasonMap.get(anime.getName()).setText(anime.getSeason());
-                        tfAnimeRunMap.get(anime.getName()).setText(anime.getRun());
-                      });
+              animeList.forEach(anime -> {
+                tfAnimeSeasonMap.get(anime.getName()).setText(anime.getSeason());
+                tfAnimeRunMap.get(anime.getName()).setText(anime.getRun());
+              });
 
-                  // Enable the buttons again and show the duration
-                  btnSearch.setEnabled(true);
-                  btnDataExport.setEnabled(true);
-                  long endTime = System.currentTimeMillis();
-                  duration = endTime - startTime;
+              // Enable the buttons again and show the duration
+              btnSearch.setEnabled(true);
+              btnDataExport.setEnabled(true);
+              long endTime = System.currentTimeMillis();
+              duration = endTime - startTime;
 
-                  if (duration == 1) {
-                    tfDuration.setText("It took " + duration + " millisecond.");
-                  } else if (duration < 1000) {
-                    tfDuration.setText("It took " + duration + " milliseconds.");
-                  } else if (duration == 1000) {
-                    tfDuration.setText("It took " + (duration / 1000.0) + " second.");
-                  } else if (duration < 60000) {
-                    tfDuration.setText("It took " + (duration / 1000.0) + " seconds.");
-                  } else if (duration == 60000) {
-                    tfDuration.setText(
-                        "It took "
-                            + String.format(Locale.US, "%.1f", duration / 60000.0)
-                            + " minute.");
-                  } else {
-                    tfDuration.setText(
-                        "It took "
-                            + String.format(Locale.US, "%.1f", duration / 60000.0)
-                            + " minutes.");
-                  }
+              if (duration == 1) {
+                tfDuration.setText("It took " + duration + " millisecond.");
+              } else if (duration < 1000) {
+                tfDuration.setText("It took " + duration + " milliseconds.");
+              } else if (duration == 1000) {
+                tfDuration.setText("It took " + (duration / 1000.0) + " second.");
+              } else if (duration < 60000) {
+                tfDuration.setText("It took " + (duration / 1000.0) + " seconds.");
+              } else if (duration == 60000) {
+                tfDuration.setText(
+                    "It took " + String.format(Locale.US, "%.1f", duration / 60000.0) + " minute.");
+              } else {
+                tfDuration.setText(
+                    "It took "
+                        + String.format(Locale.US, "%.1f", duration / 60000.0)
+                        + " minutes.");
+              }
 
-                  hasExecutedOnce = true;
-                });
+              hasExecutedOnce = true;
+            });
           }
         };
 
@@ -926,10 +913,9 @@ public class ANSChecker {
 
   /** This method resets the progress bar to 0. */
   private void resetProgressBar() {
-    EventQueue.invokeLater(
-        () -> {
-          progressBar.setValue(0);
-        });
+    EventQueue.invokeLater(() -> {
+      progressBar.setValue(0);
+    });
   }
 
   /**
@@ -938,10 +924,9 @@ public class ANSChecker {
    * @param progress The value to update the progress bar with.
    */
   private void updateProgressBar(int progress) {
-    EventQueue.invokeLater(
-        () -> {
-          progressBar.setValue(progress);
-        });
+    EventQueue.invokeLater(() -> {
+      progressBar.setValue(progress);
+    });
   }
 
   /**
